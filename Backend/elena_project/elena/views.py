@@ -28,10 +28,23 @@ def getRoute(request):
         G = ox.graph_from_point(start_point, distance=1000, network_type=modeOfTransport)
         start_node = ox.get_nearest_node(G, start_point)
         end_node = ox.get_nearest_node(G, end_point)
+
+        route = ''
         # if elev_preference == 'min':
-        #     do something here
+        #     do something here to get route
         # elif elev_preference == 'max':
-        #     do something here
+        #     do something here to get route
+
+
+        elevations = []
+        #do elevation calculation here
+
+
+        # Build response
+        response_data = {
+            'route': route,
+            'elevations': elevations
+        }
 
 
         if startLongitude == None or startLatitude == None or endLongitude == None or endLatitude == None:

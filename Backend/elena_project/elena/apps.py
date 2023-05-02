@@ -1,9 +1,18 @@
 from django.apps import AppConfig
-from geoDataRetriever import loadGraphMLData
+from . import geoDataRetriever
+from pathlib import Path
+import os
 
 class ElenaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'elena'
     def ready(self):
-        #initialize the graphs when the server is started
-        loadGraphMLData()
+        # to avoid running more than once, only run during runserver
+        if os.environ.get('RUN_MAIN'):
+            # check if the dataSet folder already exist then don't run inititalize
+            dirExist = Path("dataSets");
+            if not dirExist.is_dir():
+                geoDataRetriever.initializeGeoDataGraphs()
+            else:
+                geoDataRetriever.loadGraphMLData()
+                print("loaded")

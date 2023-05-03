@@ -13,6 +13,8 @@ def getRoute(request):
         #get the source and and destination needed to calculate the longitude and latitude
         start = request.GET.get('source', None);
         end = request.GET.get('destination', None);
+        if start == None or end == None:
+            return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
         origin_point = ox.geocoder.geocode(start);
         destination_point = ox.geocoder.geocode(end);
 
@@ -31,33 +33,30 @@ def getRoute(request):
         #percentage deviation from shortest path
         percentage_deviation = request.GET.get('deviation', 0);
         
-        if startLongitude == None or startLatitude == None or endLongitude == None or endLatitude == None:
-            return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
-        else:  
-            #call function in route processing to process the data then pass it to route processing
 
-            # Call OSMnx to get the nearest edges between the points
+        #call function in route processing to process the data then pass it to route processing
 
-            G = ox.graph_from_point(start_point, distance=1000, network_type=modeOfTransport)
-            start_node = ox.get_nearest_node(G, startLongitude, startLatitude);
-            end_node = ox.get_nearest_node(G, endLongitude, endLatitude);
+        # Call OSMnx to get the nearest edges between the points
 
-            route = ''
-            # if elev_preference == 'min':
-            #     do something here to get route
-            # elif elev_preference == 'max':
-            #     do something here to get route
+        G = ox.graph_from_point(origin_point, distance=1000, network_type=modeOfTransport)
+        start_node = ox.get_nearest_node(G, origin_point)
+        end_node = ox.get_nearest_node(G, destination_point)
+
+        route = ''
+        # if elev_preference == 'min':
+        #     do something here to get route
+        # elif elev_preference == 'max':
+        #     do something here to get route
 
 
-            elevations = []
-            #do elevation calculation here
+        elevations = []
+        #do elevation calculation here
 
-
-            # Build response
-            response_data = {
-                'route': route,
-                'elevations': elevations
-            }
+        # Build response
+        response_data = {
+            'route': route,
+            'elevations': elevations
+        }
 
     except:
         return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)

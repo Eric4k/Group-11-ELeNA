@@ -10,11 +10,17 @@ import requests
 @api_view(["GET"])
 def getRoute(request):
     try:
+        #get the source and and destination needed to calculate the longitude and latitude
+        start = request.GET.get('source', None);
+        end = request.GET.get('destination', None);
+        origin_point = ox.geocoder.geocode(start);
+        destination_point = ox.geocoder.geocode(end);
+
         #get the key value pair or set the value to none
-        startLongitude = request.GET.get('startLong', None)
-        startLatitude = request.GET.get('startLat', None)
-        endLongitude = request.GET.get('endLong', None)
-        endLatitude = request.GET.get('endLat', None)
+        startLongitude = origin_point[0];
+        startLatitude = origin_point[1];
+        endLongitude = destination_point[0];
+        endLatitude = destination_point[1];
 
         #get the mode of transportation from the request parameters
         modeOfTransport = request.GET.get('modeOfTransport', 'walk') #walk is the default mode
@@ -31,11 +37,10 @@ def getRoute(request):
             #call function in route processing to process the data then pass it to route processing
 
             # Call OSMnx to get the nearest edges between the points
-            start_point = (float(startLatitude), float(startLongitude))
-            end_point = (float(endLatitude), float(endLongitude))
+
             G = ox.graph_from_point(start_point, distance=1000, network_type=modeOfTransport)
-            start_node = ox.get_nearest_node(G, start_point)
-            end_node = ox.get_nearest_node(G, end_point)
+            start_node = ox.get_nearest_node(G, startLongitude, startLatitude);
+            end_node = ox.get_nearest_node(G, endLongitude, endLatitude);
 
             route = ''
             # if elev_preference == 'min':

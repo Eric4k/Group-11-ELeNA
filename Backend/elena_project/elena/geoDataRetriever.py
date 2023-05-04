@@ -14,7 +14,7 @@ def loadGraphMLData():
 def initializeGeoDataGraphs():
     
     #retreive the networkx graph with direct edges
-    walkGraph = ox.graph_from_address("Amherst, MA", network_type='walk', simplify=False)
+    walkGraph = ox.graph_from_place("Amherst, MA", network_type='walk', simplify=False)
     #add edge travel time
     walkGraph = ox.add_edge_travel_times(ox.add_edge_speeds(walkGraph))
     #add elevation to nodes
@@ -23,7 +23,7 @@ def initializeGeoDataGraphs():
     ox.save_graphml(walkGraph,"dataSets/Amherst_Walk_Data.graphml", gephi=False, encoding='utf-8')
     
     #retreive the networkx graph with direct edges
-    bikeGraph = ox.graph_from_address("Amherst, MA", network_type='bike', simplify=False)
+    bikeGraph = ox.graph_from_place("Amherst, MA", network_type='bike', simplify=False)
     #add edge travel time
     bikeGraph = ox.add_edge_travel_times(ox.add_edge_speeds(bikeGraph))
     #add elevation to nodes
@@ -32,7 +32,7 @@ def initializeGeoDataGraphs():
     ox.save_graphml(bikeGraph,"dataSets/Amherst_Bike_Data.graphml", gephi=False, encoding='utf-8')
         
     #retreive the networkx graph with direct edges
-    driveGraph = ox.graph_from_address("Amherst, MA", network_type='drive', simplify=False)
+    driveGraph = ox.graph_from_place("Amherst, MA", network_type='drive', simplify=False)
     #add edge travel time
     driveGraph = ox.add_edge_travel_times(ox.add_edge_speeds(driveGraph))
     #add elevation to nodes

@@ -2,6 +2,7 @@ from django.apps import AppConfig
 from . import geoDataRetriever
 from pathlib import Path
 import os
+from . import routeProcessing
 
 class ElenaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -16,3 +17,4 @@ class ElenaConfig(AppConfig):
             else:
                 geoDataRetriever.loadGraphMLData()
                 print("loaded")
+                routeProcessing.test_astar()

@@ -1,8 +1,9 @@
 from django.apps import AppConfig
-from . import geoDataRetriever
+from .geoDataRetriever import initializeGeoDataGraphs, loadGraphMLData
+from .routeProcessing import test_astar
 from pathlib import Path
 import os
-from . import routeProcessing
+
 
 class ElenaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -13,8 +14,10 @@ class ElenaConfig(AppConfig):
             # check if the dataSet folder already exist then don't run inititalize
             dirExist = Path("dataSets");
             if not dirExist.is_dir():
-                geoDataRetriever.initializeGeoDataGraphs()
+                initializeGeoDataGraphs()
             else:
-                geoDataRetriever.loadGraphMLData()
+                #TODO does not wait for data to load needs fix
+                loadGraphMLData()
                 print("loaded")
-                routeProcessing.test_astar()
+                # testing
+                # test_astar()

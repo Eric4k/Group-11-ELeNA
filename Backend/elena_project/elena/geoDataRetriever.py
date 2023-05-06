@@ -1,5 +1,9 @@
 import osmnx as ox
 
+geoDataGraphWalk = None
+geoDataGraphBike = None
+geoDataGraphDrive = None
+
 def loadGraphMLData():
     global geoDataGraphWalk
     global geoDataGraphBike
@@ -39,3 +43,18 @@ def initializeGeoDataGraphs():
     driveGraph = ox.add_node_elevations_google(driveGraph, None, max_locations_per_batch=100, pause_duration=2, precision=3, url_template='https://api.opentopodata.org/v1/aster30m?locations={}&key={}')
     #save to graphml file
     ox.save_graphml(driveGraph,"dataSets/Amherst_Drive_Data.graphml", gephi=False, encoding='utf-8')
+    
+def getBikingData():
+    # if geoDataGraphBike is None:
+    #     raise Exception("data not loaded")
+    return geoDataGraphBike
+
+def getWalkingData():
+    # if geoDataGraphWalk is None:
+    #     raise Exception("data not loaded")
+    return geoDataGraphWalk
+
+def getDrivingData():
+    # if geoDataGraphDrive is None:
+    #     raise Exception("data not loaded")
+    return geoDataGraphDrive

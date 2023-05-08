@@ -1,11 +1,7 @@
 from .geoDataRetriever import getBikingData, getDrivingData, getWalkingData, loadGraphMLData
 import networkx as nx
 import osmnx as ox
-
-# geoDataGraphWalk = ox.load_graphml("dataSets/Amherst_Bike_Data.graphml")
-#test data
-loadGraphMLData()
-geoDataGraphWalk = getBikingData()
+# from .routingAlgorithms import Astar, algorithmSelection
 
 def astar_heuristic(graph):
         return lambda nodeA, nodeB: nx.dijkstra_path_length(graph, nodeA, nodeB, weight="length")
@@ -110,33 +106,42 @@ def DFS(limit, source, target, path, graph, visited, best_path):
 # route.save("map1.html")
 
 #test astar
-# def test_astar():
+# def test_astar(geoDataGraphWalk):
 
 #     source = 64056128
 #     target = 9057663144
-#     astar_shortest_path = nx.astar_path(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
-#     astar_shortest_path_length = nx.astar_path_length(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
+    # astar_shortest_path = nx.astar_path(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
+    # astar_shortest_path_length = nx.astar_path_length(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
 
-#     limit = 90
-#     astar_shortest_path_length_limit = ((limit/100) * astar_shortest_path_length) + astar_shortest_path_length
-#     visited = {node: False for node in geoDataGraphWalk.nodes}
-#     new_graph = simplify_graph(geoDataGraphWalk, astar_shortest_path, 30)
-#     graph_elevation = DFS(astar_shortest_path_length_limit, source, target, [], new_graph, visited, {})
+    # limit = 90
+    # astar_shortest_path_length_limit = ((limit/100) * astar_shortest_path_length) + astar_shortest_path_length
+    # visited = {node: False for node in geoDataGraphWalk.nodes}
+    # new_graph = simplify_graph(geoDataGraphWalk, astar_shortest_path, 30)
+    # graph_elevation = DFS(astar_shortest_path_length_limit, source, target, [], new_graph, visited, {})
 
-#     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-#     print("SHORTEST PATH: " + str(astar_shortest_path))
-#     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    # print("SHORTEST PATH: " + str(astar_shortest_path))
+    # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-#     best_max_elevation = max(graph_elevation.items(), key=lambda x: x[0])[1]
-#     best_min_elevation = min(graph_elevation.items(), key=lambda x: x[0])[1]
+    # best_max_elevation = max(graph_elevation.items(), key=lambda x: x[0])[1]
+    # best_min_elevation = min(graph_elevation.items(), key=lambda x: x[0])[1]
+    
+    # astar = Astar()
+    
+    # routing = algorithmSelection(astar)
+    
+    # path = routing.compute_route(geoDataGraphWalk, source, target, 80, True, 20)
+    
+    # print(path)
+    
 
-#     # print(max(max_elevation.items(), key=lambda x: x[0]), shortest_path_length, shortest_path_length_limit)
-#     route = ox.plot_route_folium(geoDataGraphWalk, best_max_elevation, popup_attribute="name", route_color='green', route_width=3)
-#     route.save("map2.html")
+    # print(max(max_elevation.items(), key=lambda x: x[0]), shortest_path_length, shortest_path_length_limit)
+    # route = ox.plot_route_folium(geoDataGraphWalk, best_max_elevation, popup_attribute="name", route_color='green', route_width=3)
+    # route.save("map2.html")
 
-#     route = ox.plot_route_folium(geoDataGraphWalk, best_min_elevation, popup_attribute="name", route_color='green', route_width=3)
-#     route.save("map3.html")
+    # route = ox.plot_route_folium(geoDataGraphWalk, best_min_elevation, popup_attribute="name", route_color='green', route_width=3)
+    # route.save("map3.html")
 
-#     dp1 = nx.astar_path(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
-#     route = ox.plot_route_folium(geoDataGraphWalk, dp1, popup_attribute="name", route_color='green', route_width=3)
-#     route.save("map1.html")
+    # dp1 = nx.astar_path(geoDataGraphWalk, source, target, heuristic=astar_heuristic(geoDataGraphWalk), weight="length")
+    # route = ox.plot_route_folium(geoDataGraphWalk, dp1, popup_attribute="name", route_color='green', route_width=3)
+    # route.save("map1.html")

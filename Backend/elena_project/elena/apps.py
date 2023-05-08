@@ -1,8 +1,8 @@
 from django.apps import AppConfig
-from .geoDataRetriever import initializeGeoDataGraphs, loadGraphMLData
-from .routeProcessing import test_astar
+from .geoDataRetriever import initializeGeoDataGraphs, loadGraphMLData, getBikingData, getWalkingData, getDrivingData
 from pathlib import Path
 import os
+from .routingAlgorithms import Astar, algorithmSelection
 
 
 class ElenaConfig(AppConfig):
@@ -17,7 +17,19 @@ class ElenaConfig(AppConfig):
                 initializeGeoDataGraphs()
             else:
                 #TODO does not wait for data to load needs fix
-                loadGraphMLData()
-                print("loaded")
+                if loadGraphMLData():
+                    print("loaded")
+                    # print(getDrivingData())
+                    # print(getBikingData())
+                    # print(getWalkingData())
+                    # source = 66705576
+                    # target = 1443766572
+
+                    # astar = Astar()
+    
+                    # routing = algorithmSelection(astar)
+    
+                    # path = routing.compute_route(getBikingData(), source, target, 80, True, 20)
+                    # print(path)
+
                 # testing
-                # test_astar()

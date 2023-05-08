@@ -25,7 +25,14 @@ class Dijkstra(RoutingAlgorithm):
             new_graph = simplify_graph(graph, shortest_path, cutoff)
             elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
             
-            return max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+            route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+            
+            routeCoord = []
+            
+            for nodeId in route:
+                routeCoord.append(graph.nodes[nodeId])
+
+            return routeCoord
             
     
 class Astar(RoutingAlgorithm):
@@ -42,8 +49,15 @@ class Astar(RoutingAlgorithm):
             visited = {node: False for node in graph.nodes}
             new_graph = simplify_graph(graph, shortest_path, cutoff)
             elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
+            
+            route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+            
+            routeCoord = []
+            
+            for nodeId in route:
+                routeCoord.append(graph.nodes[nodeId])
 
-            return max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+            return routeCoord
         
 
 class algorithmSelection:

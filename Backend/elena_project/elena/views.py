@@ -28,7 +28,7 @@ def getRoute(request):
         elev_preference = request.GET.get('elev_preference', 'min') #min is the default choice
         
         #percentage deviation from shortest path
-        percentage_deviation = request.GET.get('deviation', 0);
+        percentage_deviation = float(request.GET.get('deviation', 0));
         
         #algorithm selection, default to dijkstra
         algorithm = request.GET.get('algorithm', 'dijkstra')

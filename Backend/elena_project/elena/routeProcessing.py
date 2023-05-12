@@ -3,6 +3,7 @@ import networkx as nx
 import osmnx as ox
 # from .routingAlgorithms import Astar, algorithmSelection
 
+
 def astar_heuristic(graph):
         return lambda nodeA, nodeB: nx.dijkstra_path_length(graph, nodeA, nodeB, weight="length")
     

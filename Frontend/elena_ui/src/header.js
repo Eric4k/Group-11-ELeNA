@@ -1,6 +1,7 @@
 import React from 'react';
 import './header.css';
 import axios from 'axios';
+import Map from './map';
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -103,6 +104,7 @@ class Header extends React.Component {
           </div>
         </div>
       )}
+      <Map />
       </div>
     )
   }

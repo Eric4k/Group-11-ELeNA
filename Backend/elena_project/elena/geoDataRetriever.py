@@ -1,5 +1,6 @@
 import osmnx as ox
 
+#initializing the different modes of transportation: walk, bike, drive
 geoDataGraphWalk = None
 geoDataGraphBike = None
 geoDataGraphDrive = None
@@ -9,9 +10,16 @@ def loadGraphMLData():
     global geoDataGraphBike
     global geoDataGraphDrive
     
+    #loading the map for each mode of transportation
     geoDataGraphWalk = ox.load_graphml("dataSets/Amherst_Walk_Data.graphml")
     geoDataGraphBike = ox.load_graphml("dataSets/Amherst_Bike_Data.graphml")
     geoDataGraphDrive = ox.load_graphml("dataSets/Amherst_Drive_Data.graphml")
+    
+    #wait for data to load
+    while (geoDataGraphWalk is None or geoDataGraphBike is None or geoDataGraphDrive is None):
+        pass
+    
+    return True
 
 
 # run once to create the graphs

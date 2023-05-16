@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# Create your models here.
+# create your models here.
 
 class Location(models.Model):
     lat = models.FloatField()

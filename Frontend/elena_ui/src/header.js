@@ -5,7 +5,7 @@ import Map from './map';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0};
+    this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0, route: []};
     this.handleSourceInput = this.handleSourceInput.bind(this);
     this.handleDestInput = this.handleDestInput.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -18,7 +18,6 @@ class Header extends React.Component {
 
   handleSourceInput(event) {
     this.setState({source: event.target.value});
-    console.log(this.state.source);
   }
 
   handleDestInput(event) {
@@ -28,17 +27,22 @@ class Header extends React.Component {
   async handleSearch(event) {
     event.preventDefault();
     if (this.state.deviation > 100 || this.state.deviation < 0) {
-      this.state.deviation = 100;
+      this.setState({ deviation: 100 });
     }
-    const value = await axios.post('http://localhost:3000/route/get/', {
-      'source':this.state.source,
-      'destination':this.state.dest,
-      'elev_preference':this.state.elevation,
-      'modeOfTransport':this.state.transportation,
-      'algorithm':this.state.algorithm,
-      'deviation':this.state.deviation,
+    const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
+      params: {
+        source: this.state.source,
+        destination: this.state.dest,
+        elev_preference: this.state.elev_preference,
+        modeOfTransport: this.state.transportation,
+        algorithm: this.state.algorithm,
+        deviation: this.state.deviation,
+      }
     });
-    console.log(value);
+    if (data !== undefined) {
+      this.setState({ route: data.route });
+    }
+    console.log(this.state.route);
   }
 
   handleFilter(event) {
@@ -96,7 +100,7 @@ class Header extends React.Component {
           <hr className='hr2'></hr>
           <div className='options'> 
             <input type="checkbox" name="dijkstra" className='optionBtn' checked={this.state.algorithm === "dijkstra"} onChange={this.handleAlgorithm}></input><label> Dijkstra</label>
-            <input type="checkbox" name="a*" className='optionBtn' checked={this.state.algorithm === "a*"} onChange={this.handleAlgorithm}></input><label> A Star</label>  
+            <input type="checkbox" name="astar" className='optionBtn' checked={this.state.algorithm === "astar"} onChange={this.handleAlgorithm}></input><label> A Star</label>  
           </div>
           <hr className='hr2'></hr>
           <div className='options'> 
@@ -104,7 +108,7 @@ class Header extends React.Component {
           </div>
         </div>
       )}
-      <Map />
+        <Map key={this.state.route} route={this.state.route} />
       </div>
     )
   }

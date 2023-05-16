@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  padding: 1%;
+  background-color: white;
+  justify-content: space-around;
+}
+
+.info {
+  border-style: solid;
+  border-color: antiquewhite;
+  border-radius: 15px;
+  padding: 10px;
+}

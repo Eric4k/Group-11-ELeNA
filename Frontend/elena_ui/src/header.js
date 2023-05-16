@@ -2,10 +2,11 @@ import React from 'react';
 import './header.css';
 import axios from 'axios';
 import Map from './map';
+import Statitic from './statistic';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0, route: []};
+    this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0, route: [], distance: "", totalElevation: ""};
     this.handleSourceInput = this.handleSourceInput.bind(this);
     this.handleDestInput = this.handleDestInput.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -108,6 +109,10 @@ class Header extends React.Component {
           </div>
         </div>
       )}
+      <div>
+
+      </div>
+        <Statitic source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>
         <Map key={this.state.route} route={this.state.route} />
       </div>
     )

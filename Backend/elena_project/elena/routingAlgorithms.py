@@ -69,6 +69,7 @@ class Astar(RoutingAlgorithm):
             # use depth-first search to explore elevation changes within the length limit
             elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
             
+            
             if len(elevation_graph) == 0:
                 route = shortest_path
             else:
@@ -83,6 +84,8 @@ class Astar(RoutingAlgorithm):
             elevation_net_change = path_elevation(new_graph, route);
             
             length_of_path = path_length(new_graph, route);
+            
+            print(length_of_path)
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
         

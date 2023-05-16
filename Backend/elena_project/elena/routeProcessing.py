@@ -13,7 +13,7 @@ def astar_heuristic(graph):
 def path_elevation(G, path):
     elevation = 0
     for i in range(len(path)-1):
-        elevation += G.nodes[path[i]]['elevation'] - G.nodes[path[i+1]]['elevation']
+        elevation += abs(G.nodes[path[i]]['elevation'] - G.nodes[path[i+1]]['elevation'])
     return elevation
 
 # get the length of a path

@@ -34,7 +34,7 @@ def getRoute(request):
         algorithm = request.GET.get('algorithm', 'dijkstra')
 
         graph = None
-        elevation = True if elev_preference == 'min' else False
+        elevation = True if elev_preference == 'max' else False
         #TODO
         cutoff = 30
         

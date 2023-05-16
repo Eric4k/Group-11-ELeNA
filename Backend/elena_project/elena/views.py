@@ -61,14 +61,14 @@ def getRoute(request):
             
             route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
             
-            return Response({'route': route}, status=status.HTTP_200_OK)
+            return Response({'route_detail': route}, status=status.HTTP_200_OK)
         else:
             astarStrategy = Astar()
             algo = algorithmSelection(astarStrategy)
             
             route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
             
-            return Response({'route': route}, status=status.HTTP_200_OK)
+            return Response({'route_detail': route}, status=status.HTTP_200_OK)
 
     except:
         return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)

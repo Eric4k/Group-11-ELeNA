@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from .routeProcessing import astar_heuristic, simplify_graph, DFS
+from .routeProcessing import astar_heuristic, simplify_graph, DFS, path_elevation, path_length
 import networkx as nx
 
 # define RoutingAlgorithm abstract base class
@@ -31,15 +31,22 @@ class Dijkstra(RoutingAlgorithm):
             # use depth-first search to explore elevation changes within the length limit
             elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
             
-            # select the optimal route based on whether we want to maximize or minimize the elevation changes
-            route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+            if len(elevation_graph) == 0:
+                route = shortest_path
+            else:
+                # select the optimal route based on whether we want to maximize or minimize the elevation changes
+                route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
             
             routeCoord = []
             
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
+                
+            elevation_net_change = path_elevation(new_graph, route);
+            
+            length_of_path = path_length(new_graph, route);
 
-            return routeCoord
+            return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
             
 
 # A* algorithm to find the optimal route
@@ -49,7 +56,7 @@ class Astar(RoutingAlgorithm):
             # use the networkx library's A* algorithm to find the shortest path and its length
             shortest_path = nx.astar_path(graph, source, target, heuristic=astar_heuristic(graph), weight="length")
             shortest_path_length = nx.astar_path_length(graph, source, target, heuristic=astar_heuristic(graph), weight="length")
-            
+
             if limit == 0:
                 return shortest_path
             
@@ -62,15 +69,22 @@ class Astar(RoutingAlgorithm):
             # use depth-first search to explore elevation changes within the length limit
             elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
             
-            # select the optimal route based on whether we want to maximize or minimize the elevation changes
-            route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
-            
+            if len(elevation_graph) == 0:
+                route = shortest_path
+            else:
+                # select the optimal route based on whether we want to maximize or minimize the elevation changes
+                route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+                
             routeCoord = []
             
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
 
-            return routeCoord
+            elevation_net_change = path_elevation(new_graph, route);
+            
+            length_of_path = path_length(new_graph, route);
+
+            return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
         
 
 class algorithmSelection:

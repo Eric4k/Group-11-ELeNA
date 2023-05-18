@@ -1,8 +1,10 @@
 from .geoDataRetriever import getBikingData, getDrivingData, getWalkingData, loadGraphMLData
 import networkx as nx
 import osmnx as ox
+import sys
 # from .routingAlgorithms import Astar, algorithmSelection
 
+sys.setrecursionlimit(5000)
 
 def astar_heuristic(graph):
         return lambda nodeA, nodeB: nx.dijkstra_path_length(graph, nodeA, nodeB, weight="length")
@@ -22,7 +24,6 @@ def path_length(G, path):
             length += G[path[i]][path[i+1]]['0']['length'] 
         else: 
             length += G[path[i]][path[i+1]][0]['length']
-        # length += G[path[i]][path[i+1]]['0']['length']
     return length
 
 # simplify the graph, only add edges/nodes that connect nodes in the shortest path

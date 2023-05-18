@@ -36,7 +36,7 @@ def getRoute(request):
         graph = None
         elevation = True if elev_preference == 'max' else False
         #TODO
-        cutoff = 30
+        cutoff = 50
         
         if modeOfTransport == 'walk':
             graph = getWalkingData()

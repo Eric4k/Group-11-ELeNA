@@ -30,11 +30,17 @@ class Dijkstra(RoutingAlgorithm):
             # calculate route based on the percentage limit given
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
 
-            visited = {node: False for node in graph.nodes}
-            new_graph = simplify_graph(graph, shortest_path, cutoff)
+            # cutoff for the dfs
+            cutoffs = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+            
+            # new_graph = simplify_graph(graph, shortest_path, cutoff)
+            new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
+            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+
+            # number of different paths
+            print(len(elevation_graph))
             
             if len(elevation_graph) == 0:
                 route = shortest_path
@@ -73,12 +79,17 @@ class Astar(RoutingAlgorithm):
             # calculate route based on the percentage limit given
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
             
-            visited = {node: False for node in graph.nodes}
-            new_graph = simplify_graph(graph, shortest_path, cutoff)
+            # cutoff for the dfs
+            cutoffs = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+            
+            # new_graph = simplify_graph(graph, shortest_path, cutoff)
+            new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, visited, {})
-            
+            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+
+            # number of different paths
+            print(len(elevation_graph))
             
             if len(elevation_graph) == 0:
                 route = shortest_path
@@ -94,8 +105,6 @@ class Astar(RoutingAlgorithm):
             elevation_net_change = path_elevation(new_graph, route);
             
             length_of_path = path_length(new_graph, route);
-            
-            print(length_of_path)
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
         

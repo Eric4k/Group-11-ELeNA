@@ -30,20 +30,20 @@ class Header extends React.Component {
     if (this.state.deviation > 100 || this.state.deviation < 0) {
       this.setState({ deviation: 100 });
     }
+    
     const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
       params: {
         source: this.state.source,
         destination: this.state.dest,
-        elev_preference: this.state.elev_preference,
+        elev_preference: this.state.elevation,
         modeOfTransport: this.state.transportation,
         algorithm: this.state.algorithm,
         deviation: this.state.deviation,
       }
     });
     if (data !== undefined) {
-      this.setState({ route: data.route });
+      this.setState({ route: data.route_detail.path, distance: data.route_detail.route_length, totalElevation: data.route_detail.net_elevation });
     }
-    console.log(this.state.route);
   }
 
   handleFilter(event) {

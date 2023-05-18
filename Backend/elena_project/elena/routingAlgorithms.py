@@ -20,7 +20,12 @@ class Dijkstra(RoutingAlgorithm):
             shortest_path_length = nx.shortest_path_length(graph, source=source, target=target, weight='length')
             
             if limit == 0:
-                return shortest_path
+                routeCoord = []
+            
+                for nodeId in shortest_path:
+                    routeCoord.append(graph.nodes[nodeId])
+                    
+                return { 'route_length': path_length(graph, shortest_path), 'net_elevation': path_elevation(graph, shortest_path), 'path': routeCoord }
             
             # calculate route based on the percentage limit given
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
@@ -58,7 +63,12 @@ class Astar(RoutingAlgorithm):
             shortest_path_length = nx.astar_path_length(graph, source, target, heuristic=astar_heuristic(graph), weight="length")
 
             if limit == 0:
-                return shortest_path
+                routeCoord = []
+            
+                for nodeId in shortest_path:
+                    routeCoord.append(graph.nodes[nodeId])
+                    
+                return { 'route_length': path_length(graph, shortest_path), 'net_elevation': path_elevation(graph, shortest_path), 'path': routeCoord }
             
             # calculate route based on the percentage limit given
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length

@@ -110,13 +110,16 @@ class Header extends React.Component {
             </div>
           </div>
         )}
-        <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>\
+        <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>
         {!this.state.loading && (<Map key={this.state.route} route={this.state.route} />)}
-        {this.state.loading &&(        <div className="loader-container">
-      	  <div className="spinner"></div>
-          <div className='loadingMsg'> LOADING ...</div>
-        </div>
-)}
+        {this.state.loading &&(       
+          <div className='box'>
+            <div className="ring">Loading
+              <span className='spin'></span>
+            </div>
+          </div> 
+
+        )}
       </div>
     )
   }

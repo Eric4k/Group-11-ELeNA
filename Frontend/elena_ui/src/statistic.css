@@ -3,6 +3,7 @@
   padding: 1%;
   background-color: white;
   justify-content: space-around;
+  box-shadow: 1px 5px 5px gainsboro;
 }
 
 .info {
@@ -10,4 +11,5 @@
   border-color: antiquewhite;
   border-radius: 15px;
   padding: 10px;
+  box-shadow:0 0 10px rgba(197, 183, 137, 0.5);
 }

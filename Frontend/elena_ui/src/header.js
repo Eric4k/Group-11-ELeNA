@@ -18,7 +18,6 @@ class Header extends React.Component {
     this.handleDeviation = this.handleDeviation.bind(this);
   }
   handleSourceInput(event) {
-    event.preventDefault();
     this.setState({source: event.target.value});
   }
 
@@ -27,10 +26,12 @@ class Header extends React.Component {
   }
 
   async handleSearch(event) {
-    event.preventDefault();
+    //event.preventDefault();
     if (this.state.deviation > 100 || this.state.deviation < 0) {
       this.setState({ deviation: 100 });
     }
+    console.log(this.state.source);
+    console.log(this.state.dest);
     const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
       params: {
         source: this.state.source,
@@ -42,7 +43,7 @@ class Header extends React.Component {
       }
     });
     if (data !== undefined) {
-      this.setState({source: document.getElementById('src1').value, dest: document.getElementById('dest1').value, route: data.route_detail.path, distance: data.route_detail.route_length, totalElevation: data.route_detail.net_elevation });
+      this.setState({source: this.state.source, dest: this.state.dest, route: data.route_detail.path, distance: data.route_detail.route_length, totalElevation: data.route_detail.net_elevation });
     }
   }
 
@@ -77,7 +78,7 @@ class Header extends React.Component {
         <h1 className="logo">EleNa</h1>
         <div className="searchBox">
           <div className="searchInputContainer">
-          <input type="text" placeholder="From..." value={this.state.source} onChange={this.handleSourceInput} className="inputText"/>
+            <input type="text" placeholder="From..." value={this.state.source} onChange={this.handleSourceInput} className="inputText"/>
             <hr className="hr1"></hr>
             <input type="text" placeholder="To..." value={this.state.dest} onChange={this.handleDestInput} className="inputText"/>
           </div>

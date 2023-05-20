@@ -3,6 +3,7 @@ import './header.css';
 import axios from 'axios';
 import Map from './map';
 import Statitic from './statistic';
+import { v4 as uuidv4 } from 'uuid';
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +17,8 @@ class Header extends React.Component {
     this.handleAlgorithm = this.handleAlgorithm.bind(this);
     this.handleDeviation = this.handleDeviation.bind(this);
   }
-
   handleSourceInput(event) {
+    event.preventDefault();
     this.setState({source: event.target.value});
   }
 
@@ -30,20 +31,23 @@ class Header extends React.Component {
     if (this.state.deviation > 100 || this.state.deviation < 0) {
       this.setState({ deviation: 100 });
     }
-    const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
-      params: {
-        source: this.state.source,
-        destination: this.state.dest,
-        elev_preference: this.state.elev_preference,
-        modeOfTransport: this.state.transportation,
-        algorithm: this.state.algorithm,
-        deviation: this.state.deviation,
-      }
-    });
-    if (data !== undefined) {
-      this.setState({ route: data.route });
-    }
-    console.log(this.state.route);
+    this.setState({source: document.getElementById('src1').value, dest: document.getElementById('dest1').value});
+    // const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
+    //   params: {
+    //     source: this.state.source,
+    //     destination: this.state.dest,
+    //     elev_preference: this.state.elev_preference,
+    //     modeOfTransport: this.state.transportation,
+    //     algorithm: this.state.algorithm,
+    //     deviation: this.state.deviation,
+    //   }
+    // });
+    // if (data !== undefined) {
+    //   this.setState({ route: data.route });
+    //   this.setState({distance: 0});
+    //   this.setState({totalElevation: 0});
+    // }
+    // console.log(this.state.route);
   }
 
   handleFilter(event) {
@@ -77,7 +81,7 @@ class Header extends React.Component {
         <h1 className="logo">EleNa</h1>
         <div className="searchBox">
           <div className="searchInputContainer">
-            <input type="text" placeholder="From..." value={this.state.source} onChange={this.handleSourceInput} className="inputText"/>
+          <input type="text" placeholder="From..." value={this.state.source} onChange={this.handleSourceInput} className="inputText"/>
             <hr className="hr1"></hr>
             <input type="text" placeholder="To..." value={this.state.dest} onChange={this.handleDestInput} className="inputText"/>
           </div>
@@ -109,11 +113,8 @@ class Header extends React.Component {
           </div>
         </div>
       )}
-      <div>
-
-      </div>
-        <Statitic source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>
-        <Map key={this.state.route} route={this.state.route} />
+        <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>\
+        <Map route={this.state.route} />
       </div>
     )
   }

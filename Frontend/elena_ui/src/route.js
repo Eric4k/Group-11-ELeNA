@@ -14,8 +14,11 @@ export default function Route(props) {
   if (props.coord.length !== 0) {
 
     props.coord.forEach((coord, index) => {
-      if (index === 0 || index === props.coord.length - 1) {
-        L.marker(coord).addTo(map);
+      if (index === 0) {
+        L.marker(coord).addTo(map).bindPopup(props.source);
+      }
+      if (index === props.coord.length - 1) {
+        L.marker(coord).addTo(map).bindPopup(props.dest);
       }
     });
 

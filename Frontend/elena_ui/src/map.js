@@ -9,12 +9,14 @@ class Map extends PureComponent {
   constructor(props) {
     super(props);
     this.coord = props.route.map(waypoint => L.latLng(waypoint.y, waypoint.x));
+    this.source = props.source;
+    this.dest = props.dest;
   }
   
   render() {
     return (
         <MapContainer center={this.coord.length === 0 ? [42.3754, -72.5193] : this.coord[0]} zoom={13} scrollWheelZoom={true}>
-          <Route coord={this.coord}/>
+          <Route coord={this.coord} source={this.source} dest={this.dest}/>
         </MapContainer>
     );
   }

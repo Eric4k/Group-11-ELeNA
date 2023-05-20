@@ -43,7 +43,7 @@ class Header extends React.Component {
     });
     this.setState({loading:false});
     if (data !== undefined) {
-      this.setState({route: data.route_detail.path, distance: data.route_detail.route_length, totalElevation: data.route_detail.net_elevation });
+      this.setState({route: data.route_detail.path, distance: parseInt(data.route_detail.route_length), totalElevation: parseInt(data.route_detail.net_elevation) });
     }
   }
 
@@ -96,8 +96,6 @@ class Header extends React.Component {
             <div className='options'> 
               <input type="checkbox" name="walk" className='optionBtn' checked={this.state.transportation === "walk"} onChange={this.handleTransportation}></input><label> Walk</label> 
               <input type="checkbox" name="bike" className='optionBtn' checked={this.state.transportation === "bike"} onChange={this.handleTransportation}></input><label> Bike</label>
-
-              <input type="checkbox" name="drive" className='optionBtn' checked={this.state.transportation === "drive"} onChange={this.handleTransportation}></input><label> Drive</label> 
             </div>
             <hr className='hr2'></hr>
             <div className='options'> 
@@ -111,7 +109,7 @@ class Header extends React.Component {
           </div>
         )}
         <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>
-        {!this.state.loading && (<Map key={this.state.route} route={this.state.route} />)}
+        {!this.state.loading && (<Map key={this.state.route} route={this.state.route} source={this.state.source} dest={this.state.dest} />)}
         {this.state.loading &&(       
           <div className='box'>
             <div className="ring">Loading

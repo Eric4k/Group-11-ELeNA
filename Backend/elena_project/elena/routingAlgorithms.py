@@ -37,7 +37,7 @@ class Dijkstra(RoutingAlgorithm):
             new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0, not isMax)
 
             # number of different paths
             print(len(elevation_graph))
@@ -46,7 +46,7 @@ class Dijkstra(RoutingAlgorithm):
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
-                route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+                route = elevation_graph['path']
             
             routeCoord = []
             
@@ -86,7 +86,7 @@ class Astar(RoutingAlgorithm):
             new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0, not isMax)
 
             # number of different paths
             print(len(elevation_graph))
@@ -95,16 +95,18 @@ class Astar(RoutingAlgorithm):
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
-                route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+                route = elevation_graph['path']
                 
             routeCoord = []
-            
+            print(route)
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
 
             elevation_net_change = path_elevation(new_graph, route);
             
             length_of_path = path_length(new_graph, route);
+            
+            print("here")
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
         

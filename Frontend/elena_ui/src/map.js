@@ -13,13 +13,9 @@ class Map extends PureComponent {
   
   render() {
     return (
-
         <MapContainer center={this.coord.length === 0 ? [42.3754, -72.5193] : this.coord[0]} zoom={13} scrollWheelZoom={true}>
           <Route coord={this.coord}/>
         </MapContainer>
-
-
-
     );
   }
 }

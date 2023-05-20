@@ -111,7 +111,7 @@ class Header extends React.Component {
         </div>
       )}
         <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>\
-        <Map route={this.state.route} />
+        <Map key={this.state.route} route={this.state.route} />
       </div>
     )
   }

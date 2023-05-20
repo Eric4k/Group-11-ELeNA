@@ -13,7 +13,7 @@ def astar_heuristic(graph):
 def path_elevation(G, path):
     elevation = 0
     for i in range(len(path)-1):
-        elevation += abs(G.nodes[path[i]]['elevation'] - G.nodes[path[i+1]]['elevation'])
+        elevation += (G.nodes[path[i]]['elevation'] - G.nodes[path[i+1]]['elevation']) if (G.nodes[path[i]]['elevation'] - G.nodes[path[i+1]]['elevation']) > 0 else 0
     return elevation
 
 # get the length of a path
@@ -28,11 +28,9 @@ def path_length(G, path):
 
 # simplify the graph, only add edges/nodes that connect nodes in the shortest path
 def simplify_graph(G, shortest_path, cutoff):
-    new_graph = nx.Graph()
+    new_graph = nx.DiGraph()
 
-    # add nodes that are in the shortest path
-    for node in G.nodes:
-        new_graph.add_node(node, **G.nodes[node])
+    graphNodes = []
     
     # add edges that connect nodes in the shortest path
     for i in range(len(shortest_path)-1):
@@ -41,32 +39,42 @@ def simplify_graph(G, shortest_path, cutoff):
         for simple_path in nx.all_simple_paths(G, source=current_node, target=next_node, cutoff=cutoff): #maybe make cutoff a variable
             for j in range(len(simple_path)-1):
                 edge_data = G[simple_path[j]][simple_path[j+1]]
+                
+                if simple_path[j] not in graphNodes:
+                    new_graph.add_node(simple_path[j], **G.nodes[simple_path[j]])
+                    graphNodes.append(simple_path[j])
+                
+                if simple_path[j+1] not in graphNodes:
+                    new_graph.add_node(simple_path[j+1], **G.nodes[simple_path[j+1]])
+                    graphNodes.append(simple_path[j+1])
+                
                 new_graph.add_edge(simple_path[j], simple_path[j+1], **{str(k): v for k, v in edge_data.items()})
     return new_graph
 
 # DFS to find the path with the max elevation and is within the limit
-def DFS(limit, source, target, path, graph, visited, best_path):
-    visited[source] = True
-    if limit >= 0:
-        path.append(source)
-        if source == target:
-            best_path[path_elevation(graph, path)] = path.copy()
-            # print("FOUND: ", path_elevation(graph, path), path_length(graph, path))
-        else:
-            for neighbor in nx.all_neighbors(graph, source):
-                edge_data = graph.get_edge_data(source, neighbor)
-
-                if '0' in edge_data: 
-                    edge_length = edge_data['0']['length'] 
-                else: 
-                    edge_length = edge_data[0]['length']
+def DFS(limit, source, target, path, graph, best_path, cutoff, index):
+    try:
+        if limit >= 0 and index <= cutoff:
+            path.append(source)
+            if source == target:
+                best_path[path_elevation(graph, path)] = path.copy()
+                # print("FOUND: ", path_elevation(graph, path), path_length(graph, path))
+            else:
+                for neighbor in graph.successors(source):
+                    edge_data = graph.get_edge_data(source, neighbor)
+ 
+                    if '0' in edge_data: 
+                        edge_length = edge_data['0']['length'] 
+                    else: 
+                        edge_length = edge_data[0]['length']
                 
-                if visited[neighbor] == False:
-                        DFS(limit - edge_length, neighbor, target, path, graph, visited, best_path)
+                    if neighbor not in path:
+                        DFS(limit - edge_length, neighbor, target, path, graph, best_path, cutoff, index + 1)
 
-        path.pop()
-        visited[source] = False
-    return best_path    
+            path.pop()
+        return best_path 
+    except Exception as e:
+        print(e)
 
 #small test
 # source = 64056128

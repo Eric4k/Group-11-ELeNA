@@ -31,23 +31,19 @@ class Header extends React.Component {
     if (this.state.deviation > 100 || this.state.deviation < 0) {
       this.setState({ deviation: 100 });
     }
-    this.setState({source: document.getElementById('src1').value, dest: document.getElementById('dest1').value});
-    // const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
-    //   params: {
-    //     source: this.state.source,
-    //     destination: this.state.dest,
-    //     elev_preference: this.state.elev_preference,
-    //     modeOfTransport: this.state.transportation,
-    //     algorithm: this.state.algorithm,
-    //     deviation: this.state.deviation,
-    //   }
-    // });
-    // if (data !== undefined) {
-    //   this.setState({ route: data.route });
-    //   this.setState({distance: 0});
-    //   this.setState({totalElevation: 0});
-    // }
-    // console.log(this.state.route);
+    const { data }= await axios.get('http://127.0.0.1:8000/route/get/', {
+      params: {
+        source: this.state.source,
+        destination: this.state.dest,
+        elev_preference: this.state.elevation,
+        modeOfTransport: this.state.transportation,
+        algorithm: this.state.algorithm,
+        deviation: this.state.deviation,
+      }
+    });
+    if (data !== undefined) {
+      this.setState({source: document.getElementById('src1').value, dest: document.getElementById('dest1').value, route: data.route_detail.path, distance: data.route_detail.route_length, totalElevation: data.route_detail.net_elevation });
+    }
   }
 
   handleFilter(event) {

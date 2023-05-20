@@ -48,7 +48,7 @@ class TestRouteProcessing(unittest.TestCase):
         print("TEST simplify DONE: ", test)
 
         # simplifying the graph around the shortest path
-        new_graph = simplify_graph(self.G, shortest_path, 10)
+        new_graph = simplify_graph(self.G, shortest_path, 8)
         print("simplify DONE: ", new_graph)
 
         # running DFS algorithm to find the path with maximum elevation gain

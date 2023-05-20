@@ -100,10 +100,13 @@ def DFS(limit, source, target, path, graph, best_path, cutoff, index):
 
                     if neighbor not in path:
                         new_limit = limit - edge_length
-
-                        # Prune if the maximum elevation gain is less than or equal to the current best
-                        if 'elevation' in best_path and path_elevation(graph, path + [neighbor]) <= best_path['elevation']:
-                            continue
+                        # Prune if the maximum elevation gain is less than or equal to the current best. UPDATE: best_path length now taken into account
+                        if 'elevation' in best_path:
+                            len_diff = abs(len(path + [neighbor]) - len(best_path['path']))
+                            bpe = best_path['path'][:-len_diff]
+                            # print("BPE: ", bpe, best_path['path'])
+                            if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
+                                continue
 
                         DFS(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1)
 

@@ -80,15 +80,21 @@ def DFS_OLD(limit, source, target, path, graph, best_path, cutoff, index):
     except Exception as e:
         print(e)
 
-def DFS(limit, source, target, path, graph, best_path, cutoff, index):
+def DFS(limit, source, target, path, graph, best_path, cutoff, index, min_elevation):
     try:
         if limit >= 0 and index <= cutoff:
             path.append(source)
             if source == target:
                 elevation = path_elevation(graph, path)
-                if 'elevation' not in best_path or elevation > best_path['elevation']:
-                    best_path['elevation'] = elevation
-                    best_path['path'] = path.copy()
+
+                if min_elevation:
+                    if 'elevation' not in best_path or elevation < best_path['elevation']:
+                        best_path['elevation'] = elevation
+                        best_path['path'] = path.copy()
+                else:
+                    if 'elevation' not in best_path or elevation > best_path['elevation']:
+                        best_path['elevation'] = elevation
+                        best_path['path'] = path.copy()
             else:
                 for neighbor in graph.successors(source):
                     edge_data = graph.get_edge_data(source, neighbor)
@@ -100,15 +106,19 @@ def DFS(limit, source, target, path, graph, best_path, cutoff, index):
 
                     if neighbor not in path:
                         new_limit = limit - edge_length
-                        # Prune if the maximum elevation gain is less than or equal to the current best. UPDATE: best_path length now taken into account
+                        # Prune if the maximum/minimum elevation gain is less than or equal to the current best. UPDATE: best_path length now taken into account
                         if 'elevation' in best_path:
                             len_diff = abs(len(path + [neighbor]) - len(best_path['path']))
                             bpe = best_path['path'][:-len_diff]
                             # print("BPE: ", bpe, best_path['path'])
-                            if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
-                                continue
+                            if min_elevation:
+                                if path_elevation(graph, path + [neighbor]) >= path_elevation(graph, bpe):#best_path['elevation']:
+                                    continue
+                            else: 
+                                if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
+                                    continue
 
-                        DFS(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1)
+                        DFS(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1, min_elevation)
 
             path.pop()
         return best_path

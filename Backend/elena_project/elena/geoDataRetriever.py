@@ -1,62 +1,52 @@
+from pathlib import Path
 import osmnx as ox
 
 #initializing the different modes of transportation: walk, bike, drive
 geoDataGraphWalk = None
 geoDataGraphBike = None
-geoDataGraphDrive = None
 
-def loadGraphMLData():
+def loadGraphMLData(city, state):
     global geoDataGraphWalk
     global geoDataGraphBike
-    global geoDataGraphDrive
+    
+    geoDataGraphWalk = None
+    geoDataGraphBike = None
     
     #loading the map for each mode of transportation
-    geoDataGraphWalk = ox.load_graphml("dataSets/Amherst_Walk_Data.graphml")
-    geoDataGraphBike = ox.load_graphml("dataSets/Amherst_Bike_Data.graphml")
-    geoDataGraphDrive = ox.load_graphml("dataSets/Amherst_Drive_Data.graphml")
+    geoDataGraphWalk = ox.load_graphml(f"dataSets/{city}_{state}_Walk.graphml")
+    geoDataGraphBike = ox.load_graphml(f"dataSets/{city}_{state}_Bike.graphml")
     
     #wait for data to load
-    while (geoDataGraphWalk is None or geoDataGraphBike is None or geoDataGraphDrive is None):
+    while (geoDataGraphWalk is None or geoDataGraphBike is None):
         pass
     
     return True
 
 
 # run once to create the graphs
-def initializeGeoDataGraphs():
+def initializeGeoDataGraphs(city, state):
     
     #retreive the networkx graph with direct edges
-    walkGraph = ox.graph_from_place("Amherst, MA", network_type='walk', simplify=False)
+    walkGraph = ox.graph_from_place(f"{city}, {state}", network_type='walk', simplify=False)
     #add elevation to nodes
     walkGraph = ox.add_node_elevations_google(walkGraph, None, max_locations_per_batch=100, pause_duration=2, precision=3, url_template='https://api.opentopodata.org/v1/aster30m?locations={}&key={}')
     #save to graphml file
-    ox.save_graphml(walkGraph,"dataSets/Amherst_Walk_Data.graphml", gephi=False, encoding='utf-8')
+    ox.save_graphml(walkGraph, f"dataSets/{city}_{state}_Walk.graphml", gephi=False, encoding='utf-8')
     
     #retreive the networkx graph with direct edges
-    bikeGraph = ox.graph_from_place("Amherst, MA", network_type='bike', simplify=False)
+    bikeGraph = ox.graph_from_place(f"{city}, {state}", network_type='bike', simplify=False)
     #add elevation to nodes
     bikeGraph = ox.add_node_elevations_google(bikeGraph, None, max_locations_per_batch=100, pause_duration=2, precision=3, url_template='https://api.opentopodata.org/v1/aster30m?locations={}&key={}')
     #save to graphml file
-    ox.save_graphml(bikeGraph,"dataSets/Amherst_Bike_Data.graphml", gephi=False, encoding='utf-8')
+    ox.save_graphml(bikeGraph, f"dataSets/{city}_{state}_Bike.graphml", gephi=False, encoding='utf-8')
+    
+    # waits for the file to load
+    while not Path(f"dataSets/{city}_{state}_Walk.graphml").is_file() and not Path(f"dataSets/{city}_{state}_Bike.graphml").is_file():
+        pass
         
-    #retreive the networkx graph with direct edges
-    driveGraph = ox.graph_from_place("Amherst, MA", network_type='drive', simplify=False)
-    #add elevation to nodes
-    driveGraph = ox.add_node_elevations_google(driveGraph, None, max_locations_per_batch=100, pause_duration=2, precision=3, url_template='https://api.opentopodata.org/v1/aster30m?locations={}&key={}')
-    #save to graphml file
-    ox.save_graphml(driveGraph,"dataSets/Amherst_Drive_Data.graphml", gephi=False, encoding='utf-8')
     
 def getBikingData():
-    # if geoDataGraphBike is None:
-    #     raise Exception("data not loaded")
     return geoDataGraphBike
 
 def getWalkingData():
-    # if geoDataGraphWalk is None:
-    #     raise Exception("data not loaded")
     return geoDataGraphWalk
-
-def getDrivingData():
-    # if geoDataGraphDrive is None:
-    #     raise Exception("data not loaded")
-    return geoDataGraphDrive

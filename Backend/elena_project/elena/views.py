@@ -5,7 +5,9 @@ from rest_framework.decorators import api_view
 import osmnx as ox
 import requests
 from .routingAlgorithms import algorithmSelection, Astar, Dijkstra
-from .geoDataRetriever import getBikingData, getDrivingData, getWalkingData
+from .geoDataRetriever import getBikingData, getWalkingData, initializeGeoDataGraphs, loadGraphMLData
+from pathlib import Path
+
 
 
 # Create your views here.
@@ -40,10 +42,9 @@ def getRoute(request):
         
         if modeOfTransport == 'walk':
             graph = getWalkingData()
-        elif modeOfTransport == 'bike':
-            graph = getBikingData()
         else:
-            graph = getDrivingData()
+            graph = getBikingData()
+
 
         #call function in route processing to process the data then pass it to route processing
         source = ox.nearest_nodes(graph, origin_point[1], origin_point[0], False)
@@ -72,3 +73,4 @@ def getRoute(request):
 
     except:
         return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
+    

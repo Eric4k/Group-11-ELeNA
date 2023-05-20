@@ -68,7 +68,7 @@ def getRoute(request):
             algo = algorithmSelection(astarStrategy)
             
             route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
-            
+            print("hjello")
             return Response({'route_detail': route}, status=status.HTTP_200_OK)
 
     except:

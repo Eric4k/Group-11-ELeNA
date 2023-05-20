@@ -74,17 +74,3 @@ def getRoute(request):
     except:
         return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
     
-# Create your views here.
-@api_view(["POST"])
-def changeCity(request):
-    jsonBody = request.POST.copy()
-    city = jsonBody['city']
-    state = jsonBody['state']
-    
-    city_walk_graph_exist = Path(f"dataSets/{city}_{state}_Walk.graphml")
-    city_bike_graph_exist = Path(f"dataSets/{city}_{state}_Bike.graphml")
-    
-    if city_walk_graph_exist.is_file() and city_bike_graph_exist.is_file():
-        loadGraphMLData(city, state)
-    else:
-        initializeGeoDataGraphs(city, state)

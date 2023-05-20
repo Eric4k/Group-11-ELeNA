@@ -2,9 +2,8 @@ from django.test import TestCase
 import networkx as nx
 import osmnx as ox
 import logging
-from routeProcessing import DFS, path_length, simplify_graph, path_elevation
+from routeProcessing import DFS_OLD, DFS, path_length, simplify_graph, path_elevation
 import unittest
-import networkx as nx
 
 # test to check route processing
 class TestRouteProcessing(unittest.TestCase):
@@ -36,18 +35,37 @@ class TestRouteProcessing(unittest.TestCase):
         shortest_path_length = nx.shortest_path_length(self.G, source=source, target=target, weight='length')
 
         # setting a limit for the maximum length of the path
-        limit = 90
+        limit = 10
         shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
-
+        print("shortest path length limit: ", shortest_path_length_limit, "shortest path length: ", shortest_path_length)
         path = []
 
+        cutoffs = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+        # cutoffs = 18
+        print(cutoffs)
+
+        test = simplify_graph(self.G, shortest_path, 3)
+        print("TEST simplify DONE: ", test)
+
         # simplifying the graph around the shortest path
-        new_graph = simplify_graph(self.G, shortest_path, 3)
+        new_graph = simplify_graph(self.G, shortest_path, 8)
+        print("simplify DONE: ", new_graph)
 
         # running DFS algorithm to find the path with maximum elevation gain
-        max_elevation = DFS(shortest_path_length_limit, source, target, path, new_graph, visited, best_path)
+        max_elevation = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+        print("max elevation: ", max_elevation)
         best_max_elevation = max(max_elevation.items(), key=lambda x: x[0])[1]
+        # print("elevation", max(max_elevation.items(), key=lambda x: x[0]), "best max elevation path length: ", path_length(new_graph, best_max_elevation))
+        print("elevation", max_elevation["elevation"], "\n", max_elevation["path"], "\n", "best max elevation path length: ", path_length(new_graph, best_max_elevation))
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        max_elevation_old = DFS_OLD(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0)
+        best_max_elevation_old = max(max_elevation_old.items(), key=lambda x: x[0])[1]
+        print("elevation", max(max_elevation_old.items(), key=lambda x: x[0]), "best max elevation path length: ", path_length(new_graph, best_max_elevation_old))
 
+        route = ox.plot_route_folium(self.G, shortest_path, popup_attribute="name", route_color='green', route_width=3)
+        route.save("map1.html")
+        route = ox.plot_route_folium(self.G, best_max_elevation, popup_attribute="name", route_color='green', route_width=3)
+        route.save("map2.html")
         # checking if the maximum elevation of the best path is less than or equal to the limit
         self.assertTrue(shortest_path_length_limit >= path_length(new_graph, best_max_elevation), "Max elevation less than or equal to limit")
 

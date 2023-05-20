@@ -9,27 +9,20 @@ class ElenaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'elena'
     def ready(self):
+         # specifies the file to search for
+        city = 'Amherst'
+        state = 'MA'
         # to avoid running more than once, only run during runserver
         if os.environ.get('RUN_MAIN'):
+            
             # check if the dataSet folder already exist then don't run inititalize
-            dirExist = Path("dataSets");
-            if not dirExist.is_dir():
-                initializeGeoDataGraphs("Amherst", "MA")
-            else:
-                #TODO does not wait for data to load needs fix 
-                if loadGraphMLData("Amherst", "MA"):
-                    print("loaded")
-                    # print(getDrivingData())
-                    # print(getBikingData())
-                    # print(getWalkingData())
-                    # source = 66705576
-                    # target = 1443766572
-
-                    # astar = Astar()
-    
-                    # routing = algorithmSelection(astar)
-    
-                    # path = routing.compute_route(getBikingData(), source, target, 80, True, 20)
-                    # print(path)
-
-                # testing
+            city_walk_graph_exist = Path(f"dataSets/{city}_{state}_Walk.graphml")
+            city_bike_graph_exist = Path(f"dataSets/{city}_{state}_Bike.graphml")
+            
+            # if file does not exist create it
+            if not city_walk_graph_exist.is_file() and not city_bike_graph_exist.is_file():
+                initializeGeoDataGraphs(city, state)
+            
+            if loadGraphMLData(city, state):
+                print("loaded")
+                    

@@ -2,10 +2,14 @@ from .geoDataRetriever import getBikingData, getWalkingData, loadGraphMLData
 import networkx as nx
 import osmnx as ox
 import sys
+from collections import deque
+import heapq
 # from .routingAlgorithms import Astar, algorithmSelection
+print('test')
+
+# geoDataGraphWalk = ox.load_graphml("dataSets/Amherst_Walk_Data.graphml")
 
 sys.setrecursionlimit(5000)
-
 def astar_heuristic(graph):
         return lambda nodeA, nodeB: nx.dijkstra_path_length(graph, nodeA, nodeB, weight="length")
     
@@ -52,7 +56,7 @@ def simplify_graph(G, shortest_path, cutoff):
     return new_graph
 
 # DFS to find the path with the max elevation and is within the limit
-def DFS(limit, source, target, path, graph, best_path, cutoff, index):
+def DFS_OLD(limit, source, target, path, graph, best_path, cutoff, index):
     try:
         if limit >= 0 and index <= cutoff:
             path.append(source)
@@ -69,13 +73,47 @@ def DFS(limit, source, target, path, graph, best_path, cutoff, index):
                         edge_length = edge_data[0]['length']
                 
                     if neighbor not in path:
-                        DFS(limit - edge_length, neighbor, target, path, graph, best_path, cutoff, index + 1)
+                        DFS_OLD(limit - edge_length, neighbor, target, path, graph, best_path, cutoff, index + 1)
 
             path.pop()
         return best_path 
     except Exception as e:
         print(e)
 
+def DFS(limit, source, target, path, graph, best_path, cutoff, index):
+    try:
+        if limit >= 0 and index <= cutoff:
+            path.append(source)
+            if source == target:
+                elevation = path_elevation(graph, path)
+                if 'elevation' not in best_path or elevation > best_path['elevation']:
+                    best_path['elevation'] = elevation
+                    best_path['path'] = path.copy()
+            else:
+                for neighbor in graph.successors(source):
+                    edge_data = graph.get_edge_data(source, neighbor)
+
+                    if '0' in edge_data:
+                        edge_length = edge_data['0']['length']
+                    else:
+                        edge_length = edge_data[0]['length']
+
+                    if neighbor not in path:
+                        new_limit = limit - edge_length
+                        # Prune if the maximum elevation gain is less than or equal to the current best. UPDATE: best_path length now taken into account
+                        if 'elevation' in best_path:
+                            len_diff = abs(len(path + [neighbor]) - len(best_path['path']))
+                            bpe = best_path['path'][:-len_diff]
+                            # print("BPE: ", bpe, best_path['path'])
+                            if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
+                                continue
+
+                        DFS(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1)
+
+            path.pop()
+        return best_path
+    except Exception as e:
+        print(e)
 #small test
 # source = 64056128
 # target = 9057663144

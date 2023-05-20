@@ -46,7 +46,7 @@ class Dijkstra(RoutingAlgorithm):
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
-                route = max(elevation_graph.items(), key=lambda x: x[0])[1] if isMax else (min(elevation_graph.items(), key=lambda x: x[0])[1])
+                route = elevation_graph['path']
             
             routeCoord = []
             

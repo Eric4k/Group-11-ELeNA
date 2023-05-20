@@ -8,7 +8,7 @@ Elevation Based Navigation (EleNa) is form of web application that incorporates 
 
 ## Instructions to Run EleNa
 ### Quick Start
-In order to run the web application, install the required python dependencies using `pip install -r requirements.txt`. This will install the dependencies. In the project's frontend drectory instructions for running React client is provided.
+In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory. In the `Frontend/elena_ui` drectory of the project instructions for running React client is provided.
 
 ### Watch Demo
 //embed youtube link of the presentation

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from .geoDataRetriever import initializeGeoDataGraphs, loadGraphMLData, getBikingData, getWalkingData, getDrivingData
+from .geoDataRetriever import initializeGeoDataGraphs, loadGraphMLData, getBikingData, getWalkingData
 from pathlib import Path
 import os
 from .routingAlgorithms import Astar, algorithmSelection
@@ -14,10 +14,10 @@ class ElenaConfig(AppConfig):
             # check if the dataSet folder already exist then don't run inititalize
             dirExist = Path("dataSets");
             if not dirExist.is_dir():
-                initializeGeoDataGraphs()
+                initializeGeoDataGraphs("Amherst", "MA")
             else:
-                #TODO does not wait for data to load needs fix
-                if loadGraphMLData():
+                #TODO does not wait for data to load needs fix 
+                if loadGraphMLData("Amherst", "MA"):
                     print("loaded")
                     # print(getDrivingData())
                     # print(getBikingData())

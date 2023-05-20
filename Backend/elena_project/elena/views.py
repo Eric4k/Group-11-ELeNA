@@ -5,7 +5,9 @@ from rest_framework.decorators import api_view
 import osmnx as ox
 import requests
 from .routingAlgorithms import algorithmSelection, Astar, Dijkstra
-from .geoDataRetriever import getBikingData, getDrivingData, getWalkingData
+from .geoDataRetriever import getBikingData, getWalkingData, initializeGeoDataGraphs, loadGraphMLData
+from pathlib import Path
+
 
 
 # Create your views here.
@@ -40,10 +42,9 @@ def getRoute(request):
         
         if modeOfTransport == 'walk':
             graph = getWalkingData()
-        elif modeOfTransport == 'bike':
-            graph = getBikingData()
         else:
-            graph = getDrivingData()
+            graph = getBikingData()
+
 
         #call function in route processing to process the data then pass it to route processing
         source = ox.nearest_nodes(graph, origin_point[1], origin_point[0], False)
@@ -72,3 +73,18 @@ def getRoute(request):
 
     except:
         return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
+    
+# Create your views here.
+@api_view(["POST"])
+def changeCity(request):
+    jsonBody = request.POST.copy()
+    city = jsonBody['city']
+    state = jsonBody['state']
+    
+    city_walk_graph_exist = Path(f"dataSets/{city}_{state}_Walk.graphml")
+    city_bike_graph_exist = Path(f"dataSets/{city}_{state}_Bike.graphml")
+    
+    if city_walk_graph_exist.is_file() and city_bike_graph_exist.is_file():
+        loadGraphMLData(city, state)
+    else:
+        initializeGeoDataGraphs(city, state)

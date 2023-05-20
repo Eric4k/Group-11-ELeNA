@@ -1,4 +1,4 @@
-from .geoDataRetriever import getBikingData, getDrivingData, getWalkingData, loadGraphMLData
+from .geoDataRetriever import getBikingData, getWalkingData, loadGraphMLData
 import networkx as nx
 import osmnx as ox
 import sys

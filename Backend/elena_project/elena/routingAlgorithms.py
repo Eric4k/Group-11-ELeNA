@@ -33,16 +33,19 @@ class Dijkstra(RoutingAlgorithm):
             # cutoff for the dfs
             cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
             
-            # new_graph = simplify_graph(graph, shortest_path, cutoff)
-            new_graph = graph
+            isMin = not isMax
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], graph, {}, cutoff, 0, isMin)
 
             # number of different paths
             print(len(elevation_graph))
             
             if len(elevation_graph) == 0:
+                route = shortest_path
+            elif isMax and path_elevation(graph, shortest_path) >= elevation_graph['elevation']:
+                route = shortest_path
+            elif not isMax and path_elevation(graph, shortest_path) <= elevation_graph['elevation']:
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
@@ -53,9 +56,9 @@ class Dijkstra(RoutingAlgorithm):
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
                 
-            elevation_net_change = path_elevation(new_graph, route);
+            elevation_net_change = path_elevation(graph, route);
             
-            length_of_path = path_length(new_graph, route);
+            length_of_path = path_length(graph, route);
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
             
@@ -82,16 +85,19 @@ class Astar(RoutingAlgorithm):
             # cutoff for the dfs
             cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
             
-            # new_graph = simplify_graph(graph, shortest_path, cutoff)
-            new_graph = graph
-
+            isMin = not isMax
+            
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], graph, {}, cutoff, 0, isMin)
 
             # number of different paths
             print(len(elevation_graph))
             
             if len(elevation_graph) == 0:
+                route = shortest_path
+            elif isMax and path_elevation(graph, shortest_path) >= elevation_graph['elevation']:
+                route = shortest_path
+            elif not isMax and path_elevation(graph, shortest_path) <= elevation_graph['elevation']:
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
@@ -102,9 +108,9 @@ class Astar(RoutingAlgorithm):
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
 
-            elevation_net_change = path_elevation(new_graph, route);
+            elevation_net_change = path_elevation(graph, route);
             
-            length_of_path = path_length(new_graph, route);
+            length_of_path = path_length(graph, route);
             
             print("here")
 

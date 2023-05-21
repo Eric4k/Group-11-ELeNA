@@ -2,7 +2,8 @@ from django.test import TestCase
 import networkx as nx
 import osmnx as ox
 import logging
-from routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation
+from routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation, astar_heuristic
+from routingAlgorithms import Astar, algorithmSelection
 import unittest
 
 # test to check route processing
@@ -14,9 +15,9 @@ class TestRouteProcessing(unittest.TestCase):
         self.G = ox.add_node_elevations_google(self.G, None, max_locations_per_batch=100, pause_duration=2, precision=3, url_template='https://api.opentopodata.org/v1/aster30m?locations={}&key={}')  
 
     
-    def test_DFS(self):
+    def test_DFS_With_Dijkstra_Max(self):
         logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-        logging.info('Running test_DFS')
+        logging.info('Running test_DFS_With_Dijkstra_Max')
     
         # setting the source and target nodes of the graph
         source = list(self.G.nodes())[0]
@@ -73,6 +74,32 @@ class TestRouteProcessing(unittest.TestCase):
         # route.save("map2.html")
         # checking if the maximum elevation of the best path is less than or equal to the limit
         self.assertTrue(shortest_path_length_limit >= path_length(new_graph, max_elevation["path"]), "Max elevation less than or equal to limit")
+
+
+    def test_DFS_With_Astar_Max(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Astar_Max')
+    
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
+
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
+        
+        shortest_path_length = nx.astar_path_length(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
+
+        # setting a limit for the maximum length of the path
+        limit = 10
+        shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
+
+        astarStrategy = Astar()
+        algo = algorithmSelection(astarStrategy)
+            
+        route = algo.compute_route(self.G, source, target, 10, True)
+        
+        self.assertTrue(shortest_path_length_limit >= path_length(self.G, route["path"]), "Max elevation less than or equal to limit")
 
 if __name__ == '__main__':
     unittest.main()

@@ -182,7 +182,7 @@ class TestRouteProcessing(unittest.TestCase):
         
     def test_DFS_With_Dijkstra_Deviation_Zero(self):
         logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-        logging.info('Running test_DFS_With_Astar_Min')
+        logging.info('Running test_DFS_With_Dijkstra_Deviation_Zero')
     
         # setting the source and target nodes of the graph
         source = list(self.G.nodes())[0]

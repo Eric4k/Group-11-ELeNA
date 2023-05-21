@@ -15,3 +15,4 @@ In order to run the web application, install the required dependencies using `pi
 
 ## Tests
 The test suits have been developed to facilitate evaluating the functionality of each component.
+Run the test suite `tests.py` in `Backend/elena_project` by `./manage.py test`

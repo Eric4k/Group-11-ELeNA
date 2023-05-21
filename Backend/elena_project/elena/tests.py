@@ -3,7 +3,7 @@ import networkx as nx
 import osmnx as ox
 import logging
 from .routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation, astar_heuristic
-from .routingAlgorithms import Astar, algorithmSelection
+from .routingAlgorithms import Astar, algorithmSelection, Dijkstra
 import unittest
 
 # test to check route processing
@@ -119,7 +119,7 @@ class TestRouteProcessing(unittest.TestCase):
         
     def test_DFS_With_Astar_Deviation_Zero(self):
         logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-        logging.info('Running test_DFS_With_Astar_Min')
+        logging.info('Running test_DFS_With_Astar_Deviation_Zero')
     
         # setting the source and target nodes of the graph
         source = list(self.G.nodes())[0]
@@ -132,6 +132,69 @@ class TestRouteProcessing(unittest.TestCase):
         shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
 
         astarStrategy = Astar()
+        algo = algorithmSelection(astarStrategy)
+            
+        route = algo.compute_route(self.G, source, target, 0, False, 15)
+        
+        self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
+        
+    def test_DFS_With_Dijkstra_Max(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Max')
+    
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
+
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
+        
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+
+        astarStrategy = Dijkstra()
+        algo = algorithmSelection(astarStrategy)
+            
+        route = algo.compute_route(self.G, source, target, 20, True, 15)
+            
+        self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
+        
+    def test_DFS_With_Dijkstra_Min(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Min')
+    
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
+
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
+        
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+
+        astarStrategy = Dijkstra()
+        algo = algorithmSelection(astarStrategy)
+            
+        route = algo.compute_route(self.G, source, target, 20, False, 15)
+        
+        self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
+        
+    def test_DFS_With_Dijkstra_Deviation_Zero(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Deviation_Zero')
+    
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
+
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
+        
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+
+        astarStrategy = Dijkstra()
         algo = algorithmSelection(astarStrategy)
             
         route = algo.compute_route(self.G, source, target, 0, False, 15)

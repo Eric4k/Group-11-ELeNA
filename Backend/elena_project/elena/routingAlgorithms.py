@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from .routeProcessing import astar_heuristic, DFS, path_elevation, path_length
+from .routeProcessing import astar_heuristic, DFS_With_Pruning, path_elevation, path_length
 import networkx as nx
 
 # define RoutingAlgorithm abstract base class
@@ -37,7 +37,7 @@ class Dijkstra(RoutingAlgorithm):
             new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
 
             # number of different paths
             print(len(elevation_graph))
@@ -86,7 +86,7 @@ class Astar(RoutingAlgorithm):
             new_graph = graph
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
 
             # number of different paths
             print(len(elevation_graph))

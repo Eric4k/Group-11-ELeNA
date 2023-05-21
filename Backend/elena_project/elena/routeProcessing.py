@@ -46,7 +46,7 @@ def simplify_graph(G, shortest_path, cutoff):
     return new_graph
 
 # DFS to find the path with the max elevation and is within the limit and returns multiple paths if found
-def DFS_OLD(limit, source, target, path, graph, best_path, cutoff, index):
+def DFS(limit, source, target, path, graph, best_path, cutoff, index):
     try:
         if limit >= 0 and index <= cutoff:
             path.append(source)
@@ -63,7 +63,7 @@ def DFS_OLD(limit, source, target, path, graph, best_path, cutoff, index):
                         edge_length = edge_data[0]['length']
                 
                     if neighbor not in path:
-                        DFS_OLD(limit - edge_length, neighbor, target, path, graph, best_path, cutoff, index + 1)
+                        DFS(limit - edge_length, neighbor, target, path, graph, best_path, cutoff, index + 1)
 
             path.pop()
         return best_path 
@@ -71,7 +71,7 @@ def DFS_OLD(limit, source, target, path, graph, best_path, cutoff, index):
         print(e)
 
 # find the maximum or minimum elevation path within the limit of the deviation
-def DFS(limit, source, target, path, graph, best_path, cutoff, index, min_elevation):
+def DFS_With_Pruning(limit, source, target, path, graph, best_path, cutoff, index, min_elevation):
     try:
         if limit >= 0 and index <= cutoff:
             path.append(source)
@@ -109,7 +109,7 @@ def DFS(limit, source, target, path, graph, best_path, cutoff, index, min_elevat
                                 if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
                                     continue
 
-                        DFS(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1, min_elevation)
+                        DFS_With_Pruning(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1, min_elevation)
 
             path.pop()
         return best_path

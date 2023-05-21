@@ -2,7 +2,7 @@ from django.test import TestCase
 import networkx as nx
 import osmnx as ox
 import logging
-from routeProcessing import DFS_OLD, DFS, path_length, simplify_graph, path_elevation
+from routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation
 import unittest
 
 # test to check route processing
@@ -26,9 +26,6 @@ class TestRouteProcessing(unittest.TestCase):
         logging.info(f'source: {source}')
         logging.info(f'target: {target}')
 
-        # creating a dictionary of visited nodes and an empty dictionary for best path
-        visited = {node: False for node in self.G.nodes}
-        best_path = {}
 
         # calculating the shortest path and its length using Dijkstra's algorithm
         shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
@@ -37,17 +34,14 @@ class TestRouteProcessing(unittest.TestCase):
         # setting a limit for the maximum length of the path
         limit = 10
         shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
-        path = []
 
-        cutoffs = ((len(shortest_path) * (limit/100))) + len(shortest_path)
-
-        test = simplify_graph(self.G, shortest_path, 3)
+        cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
 
         # simplifying the graph around the shortest path
         new_graph = simplify_graph(self.G, shortest_path, 3)
 
         # running DFS algorithm to find the path with maximum elevation gain
-        max_elevation = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0, False)
+        max_elevation = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, False)
 
         # # running DFS algorithm to find the path with minimum elevation gain
         # min_elevation = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0, True)

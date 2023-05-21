@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from .routeProcessing import astar_heuristic, DFS_With_Pruning, path_elevation, path_length
+from .routeProcessing import astar_heuristic, DFS_With_Pruning, path_elevation, path_length, simplify_graph
 import networkx as nx
 
 # define RoutingAlgorithm abstract base class
@@ -8,14 +8,14 @@ class RoutingAlgorithm(ABC):
     #routing interface
     
     @abstractmethod
-    def shortestPath(graph, source, target, limit, isMax):
+    def shortestPath(graph, source, target, limit, isMax, cutoff):
         pass
 
 # Dijkstra algorithm to find the optimal route
 class Dijkstra(RoutingAlgorithm):
     
     # Use the networkx library's dijkstra algorithm to find the shortest path and its length
-    def shortestPath(self, graph, source, target, limit, isMax):
+    def shortestPath(self, graph, source, target, limit, isMax, cutoff):
             shortest_path = nx.dijkstra_path(graph, source, target, weight='length')
             shortest_path_length = nx.shortest_path_length(graph, source=source, target=target, weight='length')
             
@@ -31,18 +31,20 @@ class Dijkstra(RoutingAlgorithm):
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
 
             # cutoff for the dfs
-            cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+            depth_cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
             
-            # new_graph = simplify_graph(graph, shortest_path, cutoff)
-            new_graph = graph
+            isMin = not isMax
+            
+            new_graph = simplify_graph(graph, shortest_path, cutoff)
 
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
-
-            # number of different paths
-            print(len(elevation_graph))
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, depth_cutoff, 0, isMin)
             
             if len(elevation_graph) == 0:
+                route = shortest_path
+            elif isMax and path_elevation(graph, shortest_path) >= elevation_graph['elevation']:
+                route = shortest_path
+            elif not isMax and path_elevation(graph, shortest_path) <= elevation_graph['elevation']:
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
@@ -53,9 +55,9 @@ class Dijkstra(RoutingAlgorithm):
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
                 
-            elevation_net_change = path_elevation(new_graph, route);
+            elevation_net_change = path_elevation(graph, route);
             
-            length_of_path = path_length(new_graph, route);
+            length_of_path = path_length(graph, route);
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
             
@@ -63,7 +65,7 @@ class Dijkstra(RoutingAlgorithm):
 # A* algorithm to find the optimal route
 class Astar(RoutingAlgorithm):
     
-    def shortestPath(self, graph, source, target, limit, isMax):
+    def shortestPath(self, graph, source, target, limit, isMax, cutoff):
             # use the networkx library's A* algorithm to find the shortest path and its length
             shortest_path = nx.astar_path(graph, source, target, heuristic=astar_heuristic(graph), weight="length")
             shortest_path_length = nx.astar_path_length(graph, source, target, heuristic=astar_heuristic(graph), weight="length")
@@ -80,18 +82,20 @@ class Astar(RoutingAlgorithm):
             shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
             
             # cutoff for the dfs
-            cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+            depth_cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
             
-            # new_graph = simplify_graph(graph, shortest_path, cutoff)
-            new_graph = graph
-
+            isMin = not isMax
+            
+            new_graph = simplify_graph(graph, shortest_path, cutoff)
+            
             # use depth-first search to explore elevation changes within the length limit
-            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, not isMax)
-
-            # number of different paths
-            print(len(elevation_graph))
+            elevation_graph = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, depth_cutoff, 0, isMin)
             
             if len(elevation_graph) == 0:
+                route = shortest_path
+            elif isMax and path_elevation(graph, shortest_path) >= elevation_graph['elevation']:
+                route = shortest_path
+            elif not isMax and path_elevation(graph, shortest_path) <= elevation_graph['elevation']:
                 route = shortest_path
             else:
                 # select the optimal route based on whether we want to maximize or minimize the elevation changes
@@ -102,11 +106,9 @@ class Astar(RoutingAlgorithm):
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
 
-            elevation_net_change = path_elevation(new_graph, route);
+            elevation_net_change = path_elevation(graph, route);
             
-            length_of_path = path_length(new_graph, route);
-            
-            print("here")
+            length_of_path = path_length(graph, route);
 
             return { 'route_length': length_of_path, 'net_elevation': elevation_net_change, 'path': routeCoord };
         
@@ -126,5 +128,5 @@ class algorithmSelection:
     #   cutoff: threshold distance to simplify the graph during path computation
     # output:
     #   returns a list of nodes in the computed shortest path
-    def compute_route(self, graph, source, target, limit, isMax):
-        return self._RoutingAlgorithm.shortestPath(graph, source, target, limit, isMax)
+    def compute_route(self, graph, source, target, limit, isMax, cutoff):
+        return self._RoutingAlgorithm.shortestPath(graph, source, target, limit, isMax, cutoff)

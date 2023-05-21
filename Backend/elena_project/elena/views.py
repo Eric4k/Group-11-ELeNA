@@ -1,12 +1,10 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 import osmnx as ox
-import requests
 from .routingAlgorithms import algorithmSelection, Astar, Dijkstra
-from .geoDataRetriever import getBikingData, getWalkingData, initializeGeoDataGraphs, loadGraphMLData
-from pathlib import Path
+from .geoDataRetriever import getBikingData, getWalkingData
+
 
 
 
@@ -37,8 +35,6 @@ def getRoute(request):
 
         graph = None
         elevation = True if elev_preference == 'max' else False
-        #TODO
-        cutoff = 50
         
         if modeOfTransport == 'walk':
             graph = getWalkingData()
@@ -60,15 +56,15 @@ def getRoute(request):
             dijkstraStrategy = Dijkstra()
             algo = algorithmSelection(dijkstraStrategy)
             
-            route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
+            route = algo.compute_route(graph, source, target, percentage_deviation, elevation)
             
             return Response({'route_detail': route}, status=status.HTTP_200_OK)
         else:
             astarStrategy = Astar()
             algo = algorithmSelection(astarStrategy)
             
-            route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
-            print("hjello")
+            route = algo.compute_route(graph, source, target, percentage_deviation, elevation)
+
             return Response({'route_detail': route}, status=status.HTTP_200_OK)
 
     except:

@@ -46,6 +46,8 @@ def getRoute(request):
         source = ox.nearest_nodes(graph, origin_point[1], origin_point[0], False)
         target = ox.nearest_nodes(graph, destination_point[1], destination_point[0], False)
         
+        cutoff = 15
+        
         #nearest node could return a list
         if type(source) is list:
             source = source[0]
@@ -56,14 +58,14 @@ def getRoute(request):
             dijkstraStrategy = Dijkstra()
             algo = algorithmSelection(dijkstraStrategy)
             
-            route = algo.compute_route(graph, source, target, percentage_deviation, elevation)
+            route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
             
             return Response({'route_detail': route}, status=status.HTTP_200_OK)
         else:
             astarStrategy = Astar()
             algo = algorithmSelection(astarStrategy)
             
-            route = algo.compute_route(graph, source, target, percentage_deviation, elevation)
+            route = algo.compute_route(graph, source, target, percentage_deviation, elevation, cutoff)
 
             return Response({'route_detail': route}, status=status.HTTP_200_OK)
 

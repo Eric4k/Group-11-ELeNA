@@ -37,9 +37,11 @@ class TestRouteProcessing(unittest.TestCase):
         shortest_path_length_limit = ((limit/100) * shortest_path_length) + shortest_path_length
 
         cutoff = ((len(shortest_path) * (limit/100))) + len(shortest_path)
+        
+        new_graph = simplify_graph(self.G, shortest_path, 10)
 
         # running DFS algorithm to find the path with maximum elevation gain
-        max_elevation = DFS_With_Pruning(shortest_path_length_limit, source, target, [], self.G, {}, cutoff, 0, False)
+        max_elevation = DFS_With_Pruning(shortest_path_length_limit, source, target, [], new_graph, {}, cutoff, 0, False)
 
         # # running DFS algorithm to find the path with minimum elevation gain
         # min_elevation = DFS(shortest_path_length_limit, source, target, [], new_graph, {}, cutoffs, 0, True)
@@ -90,7 +92,7 @@ class TestRouteProcessing(unittest.TestCase):
         astarStrategy = Astar()
         algo = algorithmSelection(astarStrategy)
             
-        route = algo.compute_route(self.G, source, target, 20, True)
+        route = algo.compute_route(self.G, source, target, 20, True, 15)
             
         self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
         
@@ -111,7 +113,7 @@ class TestRouteProcessing(unittest.TestCase):
         astarStrategy = Astar()
         algo = algorithmSelection(astarStrategy)
             
-        route = algo.compute_route(self.G, source, target, 20, False)
+        route = algo.compute_route(self.G, source, target, 20, False, 15)
         
         self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
         
@@ -132,7 +134,7 @@ class TestRouteProcessing(unittest.TestCase):
         astarStrategy = Astar()
         algo = algorithmSelection(astarStrategy)
             
-        route = algo.compute_route(self.G, source, target, 0, False)
+        route = algo.compute_route(self.G, source, target, 0, False, 15)
         
         self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
         

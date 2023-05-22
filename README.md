@@ -22,6 +22,10 @@ In the `Frontend/elena_ui` drectory of the project instructions for running Reac
 In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory.
 To run the backend server, use `python3 manage.py runserver` in `Backend/elena_project`.
 
+### Instruction on GraphML geodata files to change location
+The graphML files contain the geodata for the location which is currently set to `Amherst, MA`. If a different city is desired then
+a change can be made to `apps.py` in `Backend/elena_project/elena`. The `city` and `state` could be changed before the startup of the Django server and the appropriate biking and walking geodata for that location will be loaded and saved as a graphML file in the `dataSets` directory which will allow for a faster load up next time the same location is requested.
+
 ## Tests
 The test suits have been developed to facilitate evaluating the functionality of each component.
 Run the test suite `tests.py` in `Backend/elena_project` by `./manage.py test`

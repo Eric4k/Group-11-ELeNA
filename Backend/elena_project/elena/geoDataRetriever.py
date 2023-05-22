@@ -1,7 +1,7 @@
 from pathlib import Path
 import osmnx as ox
 
-#initializing the different modes of transportation: walk, bike, drive
+#initializing the different modes of transportation: walk, bike
 geoDataGraphWalk = None
 geoDataGraphBike = None
 

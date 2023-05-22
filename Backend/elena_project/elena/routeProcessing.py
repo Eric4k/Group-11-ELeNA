@@ -103,10 +103,10 @@ def DFS_With_Pruning(limit, source, target, path, graph, best_path, cutoff, inde
                             bpe = best_path['path'][:-len_diff]
                             # print("BPE: ", bpe, best_path['path'])
                             if min_elevation:
-                                if path_elevation(graph, path + [neighbor]) >= path_elevation(graph, bpe):#best_path['elevation']:
+                                if path_elevation(graph, path + [neighbor]) >= path_elevation(graph, bpe) and path_length(graph, path + [neighbor]) > limit/2:
                                     continue
                             else: 
-                                if path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe):#best_path['elevation']:
+                                if (path_elevation(graph, path + [neighbor]) <= path_elevation(graph, bpe)) and path_length(graph, path + [neighbor]) > limit/2:
                                     continue
 
                         DFS_With_Pruning(new_limit, neighbor, target, path, graph, best_path, cutoff, index + 1, min_elevation)

@@ -11,8 +11,7 @@ Elevation Based Navigation (EleNa) is form of web application that incorporates 
 ### cloning repo
 `git clone https://github.com/Eric4k/Group-11-ELeNA.git`
 ### Quick Start
-In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory. In the `Frontend/elena_ui` drectory of the project instructions for running React client would be to 
-`npm install & npm start`
+In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory. To run the backend server, use `python3 manage.py runserver` in `Backend/elena_project`. In the `Frontend/elena_ui` drectory of the project instructions for running React client would be to `npm install & npm start`
 
 ## Tests
 The test suits have been developed to facilitate evaluating the functionality of each component.

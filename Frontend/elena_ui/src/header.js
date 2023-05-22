@@ -8,8 +8,7 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0, route: [], distance: "", totalElevation: "", loading: false};
-    this.handleSourceInput = this.handleSourceInput.bind(this);
-    this.handleDestInput = this.handleDestInput.bind(this);
+
     this.handleSearch = this.handleSearch.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.handleEvelation = this.handleEvelation.bind(this);
@@ -17,20 +16,16 @@ class Header extends React.Component {
     this.handleAlgorithm = this.handleAlgorithm.bind(this);
     this.handleDeviation = this.handleDeviation.bind(this);
   }
-  handleSourceInput(event) {
-    this.setState({source: event.target.value});
-  }
 
-  handleDestInput(event) {
-    this.setState({dest: event.target.value});
-  }
 
   async handleSearch(event) {
     event.preventDefault();
     if (this.state.deviation > 100 || this.state.deviation < 0) {
-      this.setState({ deviation: 100 });
+      await this.setState({ deviation: 100 });
     }
-    this.setState({loading:true});
+    await this.setState({loading:true, source: document.getElementById('src1').value, dest: document.getElementById('dest1').value});
+    
+    
     const { data } = await axios.get('http://127.0.0.1:8000/route/get/', {
       params: {
         source: this.state.source,
@@ -78,9 +73,9 @@ class Header extends React.Component {
           <h1 className="logo">EleNa</h1>
           <div className="searchBox">
             <div className="searchInputContainer">
-              <input type="text" placeholder="From..." value={this.state.source} onChange={this.handleSourceInput} className="inputText"/>
+              <input type="text" placeholder="From..."  id="src1" className="inputText"/>
               <hr className="hr1"></hr>
-              <input type="text" placeholder="To..." value={this.state.dest} onChange={this.handleDestInput} className="inputText"/>
+              <input type="text" placeholder="To..."  id="dest1" className="inputText"/>
             </div>
             <input type="button" value="Search" onClick={this.handleSearch} className="searchBtn"/>
           </div>

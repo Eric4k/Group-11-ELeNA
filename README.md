@@ -7,8 +7,12 @@ Elevation Based Navigation (EleNa) is form of web application that incorporates 
 ![](Images/2.JPG)
 
 ## Instructions to Run EleNa
+
+### cloning repo
+`git clone https://github.com/Eric4k/Group-11-ELeNA.git`
 ### Quick Start
-In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory. In the `Frontend/elena_ui` drectory of the project instructions for running React client is provided.
+In order to run the web application, install the required dependencies using `pip install -r requirements.txt` in the `Backend` directory. In the `Frontend/elena_ui` drectory of the project instructions for running React client would be to 
+`npm install & npm start`
 
 ### Watch Demo
 //embed youtube link of the presentation

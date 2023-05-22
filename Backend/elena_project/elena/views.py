@@ -15,7 +15,7 @@ def getRoute(request):
         #get the source and and destination needed to calculate the longitude and latitude
         start = request.GET.get('source', None);
         end = request.GET.get('destination', None);
-       
+        
         if start == None or end == None:
             return Response({"status:" "Invalid Request"}, status=status.HTTP_400_BAD_REQUEST)
         origin_point = ox.geocoder.geocode(start);
@@ -32,7 +32,7 @@ def getRoute(request):
         
         #algorithm selection, default to dijkstra
         algorithm = request.GET.get('algorithm', 'dijkstra')
-
+        
         graph = None
         elevation = True if elev_preference == 'max' else False
         
@@ -41,10 +41,10 @@ def getRoute(request):
         else:
             graph = getBikingData()
 
-
+        
         #call function in route processing to process the data then pass it to route processing
-        source = ox.nearest_nodes(graph, origin_point[1], origin_point[0], False)
-        target = ox.nearest_nodes(graph, destination_point[1], destination_point[0], False)
+        source = ox.nearest_nodes(graph, origin_point[1], origin_point[0], False);    
+        target = ox.nearest_nodes(graph, destination_point[1], destination_point[0], False);
         
         cutoff = 15
         

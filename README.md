@@ -24,7 +24,7 @@ To run the backend server, use `python3 manage.py runserver` in `Backend/elena_p
 
 ### Instruction on GraphML geodata files to change location
 The graphML files contain the geodata for the location which is currently set to `Amherst, MA`. If a different city is desired then
-a change can be made to `apps.py` in `Backend/elena_project/elena`. The `city` and `state` could be changed before the startup of the Django server and the appropriate biking and walking geodata for that location will be loaded and saved as a graphML file in the `dataSets` directory which will allow for a faster load up next time the same location is requested.
+a change can be made to `apps.py` in `Backend/elena_project/elena`. The `city` and `state` variables could be changed before the startup of the Django server and the appropriate biking and walking geodata for that location will be loaded and saved as a graphML file in the `dataSets` directory which will allow for a faster load up next time the same location is requested.
 
 ## Tests
 The test suits have been developed to facilitate evaluating the functionality of each component.

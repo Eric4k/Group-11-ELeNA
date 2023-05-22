@@ -8,7 +8,6 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {source:"", dest:"", filterOpen: false, elevation: "min", transportation: "walk", algorithm: "dijkstra", deviation: 0, route: [], distance: "", totalElevation: "", loading: false};
-
     this.handleSearch = this.handleSearch.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.handleEvelation = this.handleEvelation.bind(this);
@@ -16,15 +15,14 @@ class Header extends React.Component {
     this.handleAlgorithm = this.handleAlgorithm.bind(this);
     this.handleDeviation = this.handleDeviation.bind(this);
   }
-
-
+  
+  //given a location and a source this function will call the api from the backend to return the route
   async handleSearch(event) {
     event.preventDefault();
     if (this.state.deviation > 100 || this.state.deviation < 0) {
       await this.setState({ deviation: 100 });
     }
     await this.setState({loading:true, source: document.getElementById('src1').value, dest: document.getElementById('dest1').value});
-    
     
     const { data } = await axios.get('http://127.0.0.1:8000/route/get/', {
       params: {
@@ -82,6 +80,7 @@ class Header extends React.Component {
           <input type="button" value="Filter" onClick={this.handleFilter} className="filterBtn"/>
         </div>
         {this.state.filterOpen && (
+          //Dropdown that contains different options the user can filter by
           <div className="dropdown">
             <div className='options'>
               <input type="checkbox" name="min" className='optionBtn' checked={this.state.elevation === "min"} onChange={this.handleEvelation}></input><label> Min Elevation</label>
@@ -103,8 +102,10 @@ class Header extends React.Component {
             </div>
           </div>
         )}
+       
         <Statitic key1={uuidv4()} key2={uuidv4()} key3={uuidv4()} key4={uuidv4()} source={this.state.source} dest={this.state.dest} distance={this.state.distance} totalElevation={this.state.totalElevation}/>
         {!this.state.loading && (
+          //Given a route the Map compoenent will display it on a map utilizing leaflet
           <Map key={this.state.route} route={this.state.route} source={this.state.source} dest={this.state.dest} />
         )}
         {this.state.loading &&(       

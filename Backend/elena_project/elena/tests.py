@@ -2,8 +2,8 @@ from django.test import TestCase
 import networkx as nx
 import osmnx as ox
 import logging
-# from .routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation, astar_heuristic
-# from .routingAlgorithms import Astar, algorithmSelection, Dijkstra
+from .routeProcessing import DFS, DFS_With_Pruning, path_length, simplify_graph, path_elevation, astar_heuristic
+from .routingAlgorithms import Astar, algorithmSelection, Dijkstra
 import unittest
 
 # test to check route processing
@@ -85,131 +85,131 @@ class TestRouteProcessing(unittest.TestCase):
         # checking if the minimum elevation of the best path is less than or equal to the limit
         self.assertTrue(shortest_path_length_limit >= path_length(self.G, min_elevation["path"]), "Min path length less than or equal to limit")
 
-    # def test_DFS_With_Astar_Max(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Astar_Max')
+    def test_DFS_With_Astar_Max(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Astar_Max')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
+        shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
 
-    #     astarStrategy = Astar()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Astar()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 20, True, 15)
+        route = algo.compute_route(self.G, source, target, 20, True, 15)
             
-    #     self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
         
-    # def test_DFS_With_Astar_Min(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Astar_Min')
+    def test_DFS_With_Astar_Min(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Astar_Min')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
+        shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
 
-    #     astarStrategy = Astar()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Astar()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 20, False, 15)
+        route = algo.compute_route(self.G, source, target, 20, False, 15)
         
-    #     self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
         
-    # def test_DFS_With_Astar_Deviation_Zero(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Astar_Deviation_Zero')
+    def test_DFS_With_Astar_Deviation_Zero(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Astar_Deviation_Zero')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
+        shortest_path = nx.astar_path(self.G, source, target, heuristic=astar_heuristic(self.G), weight="length")
 
-    #     astarStrategy = Astar()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Astar()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 0, False, 15)
+        route = algo.compute_route(self.G, source, target, 0, False, 15)
         
-    #     self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
         
-    # def test_DFS_With_Dijkstra_Max(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Dijkstra_Max')
+    def test_DFS_With_Dijkstra_Max(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Max')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
 
-    #     astarStrategy = Dijkstra()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Dijkstra()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 20, True, 15)
+        route = algo.compute_route(self.G, source, target, 20, True, 15)
             
-    #     self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) <= route["net_elevation"], "Max elevation is greater than or equal to shortest path")
         
-    # def test_DFS_With_Dijkstra_Min(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Dijkstra_Min')
+    def test_DFS_With_Dijkstra_Min(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Min')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
 
-    #     astarStrategy = Dijkstra()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Dijkstra()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 20, False, 15)
+        route = algo.compute_route(self.G, source, target, 20, False, 15)
         
-    #     self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) >= route["net_elevation"], "Max elevation is less than or equal to shortest path")
         
-    # def test_DFS_With_Dijkstra_Deviation_Zero(self):
-    #     logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
-    #     logging.info('Running test_DFS_With_Dijkstra_Deviation_Zero')
+    def test_DFS_With_Dijkstra_Deviation_Zero(self):
+        logging.basicConfig(filename='test.log', level=logging.DEBUG, format='%(asctime)s %(message)s') #setting up configurations
+        logging.info('Running test_DFS_With_Dijkstra_Deviation_Zero')
     
-    #     # setting the source and target nodes of the graph
-    #     source = list(self.G.nodes())[0]
-    #     target = list(self.G.nodes())[-1]
+        # setting the source and target nodes of the graph
+        source = list(self.G.nodes())[0]
+        target = list(self.G.nodes())[-1]
 
-    #     # logging the source and target node ids
-    #     logging.info(f'source: {source}')
-    #     logging.info(f'target: {target}')
+        # logging the source and target node ids
+        logging.info(f'source: {source}')
+        logging.info(f'target: {target}')
         
-    #     shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
+        shortest_path = nx.dijkstra_path(self.G, source, target, weight='length')
 
-    #     astarStrategy = Dijkstra()
-    #     algo = algorithmSelection(astarStrategy)
+        astarStrategy = Dijkstra()
+        algo = algorithmSelection(astarStrategy)
             
-    #     route = algo.compute_route(self.G, source, target, 0, False, 15)
+        route = algo.compute_route(self.G, source, target, 0, False, 15)
         
-    #     self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
+        self.assertTrue(path_elevation(self.G, shortest_path) == route["net_elevation"], "Max elevation equal to shortest path")
         
 
 

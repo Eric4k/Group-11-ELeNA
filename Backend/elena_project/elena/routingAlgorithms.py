@@ -102,7 +102,7 @@ class Astar(RoutingAlgorithm):
                 route = elevation_graph['path']
                 
             routeCoord = []
-            print(route)
+   
             for nodeId in route:
                 routeCoord.append(graph.nodes[nodeId])
 
